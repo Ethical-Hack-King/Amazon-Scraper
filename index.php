@@ -18,7 +18,6 @@
             if (isset($_GET['scrap'])) {
                 $search = $_GET['search'];
                 $search = str_replace(' ','+', $search);
-                // echo $search;
             
                 if (!empty($search)) {
                     $curl = curl_init();
@@ -29,21 +28,10 @@
                     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
                     curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
                     $result = curl_exec($curl);
-                    /*  
-                        https://m.media-amazon.com/images/I/51DtuAM0HsL._AC_UY218_.jpg
-                        https://m.media-amazon.com/images/I/71UneM84G7L._AC_UY218_.jpg
-                        https://m.media-amazon.com/images/I/713vSco+MPL._AC_UL320_.jpg
-                        [0] => https://m.media-amazon.com/images/I/51ndxZcdt+L._AC_UY218_.jpg
-                        [1] => https://m.media-amazon.com/images/I/51ndxZcdt+L._AC_UY327_QL65_.jpg
-                    */
                     // preg_match_all("!https://m.media-amazon.com/images/I/[^/s]*?._AC_UY218_.jpg!",$result,$product_image); //old
                     preg_match_all("!https://m.media-amazon.com/images/I/[^/s]*?._AC_[^/s]*_.jpg!",$result,$product_image);
-                    preg_match_all('!a-size-medium a-color-base a-text-normal" dir="auto">[^/s]*?.</span>!',$result,$product_name);
-                    // print_r($product_name);
+                    // preg_match_all('!a-size-medium a-color-base a-text-normal" dir="auto">[^/s]*?.</span>!',$result,$product_name); //WIP
                     $images = array_values(array_unique($product_image[0]));
-                    // echo "<pre>";
-                    // print_r($product_name);
-                    // echo "</pre>";
 
                     echo '<div class="row"> ';
                     for ($i=0; $i<count($images); $i++) { 
@@ -52,8 +40,17 @@
                             echo "<img src='$images[$i]'>";
                             echo '</div>';
                         }
+                        // Download Images
+                        $img_url = $images[$i];
+                        $dir = 'images/';
+                        $filename = basename($img_url);
+                        $complete_save_loc = $dir.$filename;
+                        file_put_contents($complete_save_loc,file_get_contents($img_url));
                     }
                     echo '</div>';
+                    // Pagination - WIP
+                    //https://www.amazon.in/s?k=ps4+games&ref=nb_sb_ss_i_1_6
+                    //https://www.amazon.in/s?k=ps4+games&page=2&qid=1598251818&ref=sr_pg_2
                     curl_close($curl);
                 }
             }
