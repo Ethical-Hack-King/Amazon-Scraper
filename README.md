@@ -1,2 +1,2 @@
 # Amazon-Scraper
-Scrap images form Amazon using PHP cURL
+Scrap images from Amazon using PHP cURL
