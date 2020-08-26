@@ -8,7 +8,6 @@
 </head>
 <body>
     <h1>Amazon Scraper</h1>
-
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
         <input type="text" name="search" id="search" placeholder="Search Term">
         <input type="submit" name="scrap" value="Scrap">
